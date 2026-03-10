@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jas-Expl0Itz | Private Cloud</title>
+    <style>
+        /* DASHBOARD ADMIN (PRIVATE) */
+        body { 
+            background: #000; color: #00ff00; 
+            font-family: 'Courier New', monospace; 
+            margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; 
+        }
+        #admin-panel { 
+            display: none; width: 90%; max-width: 800px; border: 1px solid #00ff00; 
+            padding: 30px; border-radius: 10px; box-shadow: 0 0 20px #00ff00; 
+        }
+        h1 { text-align: center; letter-spacing: 5px; text-shadow: 0 0 10px #00ff00; }
+        textarea { 
+            width: 100%; height: 300px; background: #080808; color: #00ff00; 
+            border: 1px solid #333; padding: 15px; box-sizing: border-box; 
+            font-size: 14px; outline: none; border-radius: 5px;
+        }
+        button { 
+            width: 100%; padding: 15px; background: #00ff00; color: #000; 
+            border: none; font-weight: bold; cursor: pointer; font-size: 18px; 
+            margin-top: 15px; border-radius: 5px;
+        }
+        button:hover { background: #fff; box-shadow: 0 0 20px #fff; }
+        .result-box { 
+            margin-top: 25px; padding: 15px; background: #111; 
+            border-left: 5px solid #fff; word-break: break-all; display: none; color: #fff;
+        }
+
+        /* LAYAR BIRU JEBAKAN (UNTUK BROWSER) */
+        #skid-screen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: blue; color: white; flex-direction: column; align-items: center;
+            justify-content: center; font-family: 'Arial Black', sans-serif;
+            text-align: center; z-index: 99999;
+        }
+    </style>
+</head>
+<body id="main-body">
+
+    <div id="admin-panel">
+        <h1>[ JAS-EXPL0ITZ GEN ]</h1>
+        <p style="color: #888;">// Masukkan Script Lua (Misal: print("Nazmi")) :</p>
+        <textarea id="lua-input" placeholder="-- Paste your private script here..."></textarea>
+        <button onclick="generateRaw()">GENERATE RAW LINK</button>
+
+        <div id="result-box" class="result-box">
+            <p style="color: #00ff00; margin: 0 0 10px 0;">// Link Loadstring (Raw Online) :</p>
+            <code id="final-link" style="font-size: 14px;"></code>
+        </div>
+    </div>
+
+    <div id="skid-screen">
+        <h1 style="font-size: 60px; margin: 0;">bro mencoba untuk skid 😡💔</h1>
+        <p style="font-size: 20px; opacity: 0.8; margin-top: 20px;">Detected by Jas-Expl0Itz Security Protection</p>
+    </div>
+
+    <script>
+        // --- GANTI PASSWORD LO DI SINI ---
+        const PASSWORD_GUE = "NAS_GANTENG"; 
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const scriptRaw = urlParams.get('raw');
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isRoblox = userAgent.includes("roblox");
+
+        // 1. LOGIKA RAW (Dijalankan Executor)
+        if (scriptRaw) {
+            if (isRoblox) {
+                // Executor dapet code polosan (Base64 decoded)
+                document.body.innerHTML = atob(scriptRaw);
+                document.body.style.background = "#fff";
+                document.body.style.color = "#000";
+            } else {
+                // Browser orang lain dapet Layar Biru
+                document.getElementById('admin-panel').style.display = 'none';
+                document.getElementById('skid-screen').style.display = 'flex';
+            }
+        } else {
+            // 2. LOGIKA ADMIN (Login buat lo)
+            const input = prompt("JAS-EXPL0ITZ ACCESS CODE:");
+            if (input === PASSWORD_GUE) {
+                document.getElementById('admin-panel').style.display = 'block';
+            } else {
+                alert("ACCESS DENIED!");
+                document.body.innerHTML = "<h1 style='color:red; text-align:center;'>403 FORBIDDEN</h1>";
+            }
+        }
+
+        // FUNGSI GENERATE
+        function generateRaw() {
+            const code = document.getElementById('lua-input').value;
+            if (!code) return alert("Isi scriptnya dulu!");
+
+            const encoded = btoa(code); // Encode ke Base64 biar rahasia
+            const baseUrl = window.location.href.split('?')[0];
+            const resultUrl = `${baseUrl}?raw=${encoded}`;
+            
+            const loadstring = `loadstring(game:HttpGet("${resultUrl}"))()`;
+            
+            document.getElementById('result-box').style.display = 'block';
+            document.getElementById('final-link').innerText = loadstring;
+        }
+    </script>
+</body>
+</html>
